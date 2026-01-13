@@ -1,5 +1,5 @@
-from backend.app.db import init_db, SessionLocal
-from backend.app.models.exercise import Exercise
+from app.db import init_db, SessionLocal
+from app.models.exercise import Exercise
 
 def init_exercises():
     db = SessionLocal()

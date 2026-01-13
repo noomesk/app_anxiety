@@ -1,9 +1,9 @@
 from typing import List, Dict
-from backend.app.services.groq_client import groq_client
-from backend.app.services.exercise_selector import exercise_selector
-from backend.app.core.risk_detection import detect_risk, get_crisis_response
-from backend.app.prompts.system_prompt import SYSTEM_PROMPT
-from backend.app.prompts.safety_prompt import SAFETY_PROMPT
+from app.services.groq_client import groq_client
+from app.services.exercise_selector import exercise_selector
+from app.core.risk_detection import detect_risk, get_crisis_response
+from app.prompts.system_prompt import SYSTEM_PROMPT
+from app.prompts.safety_prompt import SAFETY_PROMPT
 
 class ChatEngine:
     def __init__(self):

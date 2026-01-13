@@ -1,6 +1,6 @@
 import httpx
 from typing import Dict, Any
-from backend.app.core.config import settings
+from app.core.config import settings
 
 class GroqClient:
     def __init__(self):
