@@ -6,7 +6,7 @@ class GroqClient:
     def __init__(self):
         self.api_key = settings.GROQ_API_KEY
         self.base_url = "https://api.groq.com/openai/v1"
-        self.model = "llama3-8b-8192"
+        self.model = "llama-3.1-8b-instant"  # Modelo actualizado y rápido
         
     async def chat_completion(self, messages: list) -> str:
         """
@@ -40,6 +40,8 @@ class GroqClient:
                 return data["choices"][0]["message"]["content"]
             except Exception as e:
                 print(f"Error calling Groq API: {e}")
+                print(f"Response status: {response.status_code if 'response' in locals() else 'No response'}")
+                print(f"Response text: {response.text if 'response' in locals() else 'No response'}")
                 return "Lo siento, estoy teniendo dificultades para responder en este momento. ¿Podrías intentarlo de nuevo?"
 
 groq_client = GroqClient()
