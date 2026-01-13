@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List, Optional
-from backend.app.db import get_db
-from backend.app.models.user import User
-from backend.app.models.message import Message
-from backend.app.models.memory import UserMemory
-from backend.app.services.chat_engine import chat_engine
-from backend.app.core.security import verify_token
+from app.db import get_db
+from app.models.user import User
+from app.models.message import Message
+from app.models.memory import UserMemory
+from app.services.chat_engine import chat_engine
+from app.core.security import verify_token
 
 router = APIRouter()
 

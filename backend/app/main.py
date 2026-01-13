@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.api import auth, chat
-from backend.app.db import init_db
+from .api import auth, chat
+from .db import init_db
 
 app = FastAPI(title="Anxiety Companion API")
 

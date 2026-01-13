@@ -1,6 +1,6 @@
 from typing import List, Dict
-from backend.app.models.exercise import Exercise
-from backend.app.db import SessionLocal
+from app.models.exercise import Exercise
+from app.db import SessionLocal
 
 class ExerciseSelector:
     def __init__(self):

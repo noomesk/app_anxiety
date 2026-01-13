@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from backend.app.core.config import settings
+from app.core.config import settings
 
 engine = create_engine(settings.DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -9,10 +9,10 @@ Base = declarative_base()
 
 def init_db():
     """Initialize the database and create tables."""
-    from backend.app.models.user import User
-    from backend.app.models.message import Message
-    from backend.app.models.memory import UserMemory
-    from backend.app.models.exercise import Exercise
+    from app.models.user import User
+    from app.models.message import Message
+    from app.models.memory import UserMemory
+    from app.models.exercise import Exercise
     
     Base.metadata.create_all(bind=engine)
 
