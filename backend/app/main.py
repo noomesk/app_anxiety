@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .api import auth, chat
+from .api import auth, chat, evaluations
 from .db import init_db
 
 app = FastAPI(title="Anxiety Companion API")
@@ -17,6 +17,7 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
+app.include_router(evaluations.router, prefix="/api/evaluations", tags=["evaluations"])
 
 @app.on_event("startup")
 async def startup_event():

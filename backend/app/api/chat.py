@@ -6,17 +6,17 @@ from pydantic import BaseModel
 
 from typing import List, Optional
 
-from .db import get_db
+from app.db import get_db
 
-from .models.user import User
+from app.models.user import User
 
-from .models.message import Message
+from app.models.message import Message
 
-from .models.memory import UserMemory
+from app.models.memory import UserMemory
 
-from .services.chat_engine import chat_engine
+from app.services.chat_engine import chat_engine
 
-from .core.security import verify_token
+from app.core.security import verify_token
 
 
 
@@ -148,6 +148,12 @@ async def send_message(request: MessageRequest, db: Session = Depends(get_db)):
 
     
 
+    # Update user memory dynamically based on message content
+
+    await _update_user_memory(request.user_id, request.content, db)
+
+    
+
     return MessageResponse(content=bot_response, is_user=False)
 
 
@@ -227,3 +233,81 @@ async def update_user_memory(user_id: int, request: MemoryUpdateRequest, db: Ses
     
 
     return {"message": "Memory updated successfully"}
+
+
+async def _update_user_memory(user_id: int, message_content: str, db: Session):
+    """Update user memory dynamically based on message content"""
+    
+    # Get or create user memory
+    user_memory = db.query(UserMemory).filter(UserMemory.user_id == user_id).first()
+    if not user_memory:
+        user_memory = UserMemory(user_id=user_id)
+        db.add(user_memory)
+    
+    # Detect emotional state from message
+    emotional_state = _detect_emotional_state(message_content)
+    if emotional_state:
+        user_memory.last_emotional_state = emotional_state
+    
+    # Extract name if mentioned
+    name = _extract_name(message_content)
+    if name and not user_memory.name_or_alias:
+        user_memory.name_or_alias = name
+    
+    # Detect exercise preferences
+    exercise_preference = _detect_exercise_preference(message_content)
+    if exercise_preference:
+        user_memory.preferred_exercises = exercise_preference
+    
+    db.commit()
+
+
+def _detect_emotional_state(message: str) -> str:
+    """Detect emotional state from message content"""
+    message_lower = message.lower()
+    
+    if any(word in message_lower for word in ["feliz", "contento", "alegre", "bien"]):
+        return "positivo"
+    elif any(word in message_lower for word in ["triste", "deprimido", "mal", "abajo"]):
+        return "negativo"
+    elif any(word in message_lower for word in ["ansioso", "nervioso", "preocupado", "tenso"]):
+        return "ansioso"
+    elif any(word in message_lower for word in ["calmado", "relajado", "tranquilo", "paz"]):
+        return "calmado"
+    
+    return None
+
+
+def _extract_name(message: str) -> str:
+    """Extract user name from message"""
+    import re
+    
+    # Simple pattern: "me llamo [nombre]" or "soy [nombre]"
+    patterns = [
+        r"me llamo\s+(\w+)",
+        r"soy\s+(\w+)",
+        r"mi nombre es\s+(\w+)"
+    ]
+    
+    for pattern in patterns:
+        match = re.search(pattern, message.lower())
+        if match:
+            return match.group(1).capitalize()
+    
+    return None
+
+
+def _detect_exercise_preference(message: str) -> str:
+    """Detect exercise preferences from message"""
+    message_lower = message.lower()
+    
+    if any(word in message_lower for word in ["respirar", "respiración", "respirar"]):
+        return "respiracion"
+    elif any(word in message_lower for word in ["grounding", "sentidos", "5-4-3-2-1"]):
+        return "grounding"
+    elif any(word in message_lower for word in ["relajar", "relajación", "muscular"]):
+        return "relajacion"
+    elif any(word in message_lower for word in ["pensamientos", "cognitivo", "reevaluación"]):
+        return "cognitivo"
+    
+    return None

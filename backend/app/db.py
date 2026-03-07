@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy.orm import sessionmaker
 
-from backend.app.core.config import settings
+from app.core.config import settings
 
 
 
@@ -20,13 +20,15 @@ def init_db():
 
     """Initialize the database and create tables."""
 
-    from backend.app.models.user import User
+    from app.models.user import User
 
-    from backend.app.models.message import Message
+    from app.models.message import Message
 
-    from backend.app.models.memory import UserMemory
+    from app.models.memory import UserMemory
 
-    from backend.app.models.exercise import Exercise
+    from app.models.exercise import Exercise
+
+    from app.models.evaluation import Evaluation
 
     
 

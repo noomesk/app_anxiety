@@ -1,14 +1,14 @@
 from typing import List, Dict
 
-from backend.app.services.groq_client import groq_client
+from app.services.groq_client import groq_client
 
-from backend.app.services.exercise_selector import exercise_selector
+from app.services.exercise_selector import exercise_selector
 
-from backend.app.core.risk_detection import detect_risk, get_crisis_response
+from app.core.risk_detection import detect_risk, get_crisis_response
 
-from backend.app.prompts.system_prompt import SYSTEM_PROMPT
+from app.prompts.system_prompt import SYSTEM_PROMPT
 
-from backend.app.prompts.safety_prompt import SAFETY_PROMPT
+from app.prompts.safety_prompt import SAFETY_PROMPT
 
 
 
@@ -36,21 +36,51 @@ class ChatEngine:
 
             
 
-        # Prepare context with user memory
+        # Detect anxiety keywords to suggest exercises
 
-        context = self._prepare_context(user_memory)
+        if self._detect_anxiety(user_message):
 
-        
+            exercise = self._select_appropriate_exercise(user_memory)
 
-        # Prepare messages for LLM
+            if exercise:
 
-        messages = [
+                exercise_text = self._format_exercise(exercise)
 
-            {"role": "system", "content": SYSTEM_PROMPT + context},
+                # Get empathetic response with exercise
 
-            {"role": "user", "content": user_message}
+                context = self._prepare_context(user_memory)
 
-        ]
+                messages = [
+
+                    {"role": "system", "content": SYSTEM_PROMPT + context + f"\n\nEjercicio recomendado:\n{exercise_text}"},
+
+                    {"role": "user", "content": user_message}
+
+                ]
+
+            else:
+
+                context = self._prepare_context(user_memory)
+
+                messages = [
+
+                    {"role": "system", "content": SYSTEM_PROMPT + context},
+
+                    {"role": "user", "content": user_message}
+
+                ]
+
+        else:
+
+            context = self._prepare_context(user_memory)
+
+            messages = [
+
+                {"role": "system", "content": SYSTEM_PROMPT + context},
+
+                {"role": "user", "content": user_message}
+
+            ]
 
         
 
@@ -111,6 +141,51 @@ class ChatEngine:
             
 
         return ""
+
+    
+
+    def _detect_anxiety(self, user_message: str) -> bool:
+
+        """Detect anxiety keywords in user message"""
+
+        anxiety_keywords = [
+            "ansiedad", "ansioso", "ansiosa", "nervioso", "nerviosa",
+            "preocupado", "preocupada", "estresado", "estresada",
+            "panico", "pánico", "ataque", "miedo", "temor",
+            "angustia", "angustiado", "angustiada", "tenso", "tensa"
+        ]
+        
+        return any(keyword in user_message.lower() for keyword in anxiety_keywords)
+    
+    def _select_appropriate_exercise(self, user_memory: Dict = None) -> Dict:
+        """Select appropriate exercise based on user memory and preferences"""
+        
+        # Get all available exercises
+        exercises = exercise_selector.get_all_exercises()
+        
+        if not exercises:
+            return None
+            
+        # If user has preferred exercises, try to use those
+        if user_memory and user_memory.get("preferred_exercises"):
+            preferred = user_memory["preferred_exercises"].lower()
+            for exercise in exercises:
+                if preferred in exercise["category"].lower():
+                    return exercise
+        
+        # Default selection logic: rotate through exercises
+        import random
+        return random.choice(exercises)
+    
+    def _format_exercise(self, exercise: Dict) -> str:
+        """Format exercise for inclusion in response"""
+        return f"""
+EJERCICIO RECOMENDADO: {exercise['name']}
+Categoría: {exercise['category']}
+Descripción: {exercise['description']}
+Instrucciones:
+{exercise['instructions']}
+"""
 
 
 
