@@ -29,65 +29,35 @@ class ChatEngine:
         """
 
         # First check for risk
-
         if detect_risk(user_message):
-
             return get_crisis_response()
-
             
-
         # Detect anxiety keywords to suggest exercises
-
         if self._detect_anxiety(user_message):
-
             exercise = self._select_appropriate_exercise(user_memory)
-
             if exercise:
-
                 exercise_text = self._format_exercise(exercise)
-
                 # Get empathetic response with exercise
-
                 context = self._prepare_context(user_memory)
-
                 messages = [
-
                     {"role": "system", "content": SYSTEM_PROMPT + context + f"\n\nEjercicio recomendado:\n{exercise_text}"},
-
                     {"role": "user", "content": user_message}
-
                 ]
-
             else:
-
                 context = self._prepare_context(user_memory)
-
                 messages = [
-
                     {"role": "system", "content": SYSTEM_PROMPT + context},
-
                     {"role": "user", "content": user_message}
-
                 ]
-
         else:
-
             context = self._prepare_context(user_memory)
-
             messages = [
-
                 {"role": "system", "content": SYSTEM_PROMPT + context},
-
                 {"role": "user", "content": user_message}
-
             ]
-
         
-
         # Get response from LLM
-
         response = await groq_client.chat_completion(messages)
-
         return response
 
         

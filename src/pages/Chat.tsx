@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Heart, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+const MASCOT_URL =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuDCHFLGYbTmTeRXf-l4i2c_lKxAEARQNoxKd8G5rIMV55h7IZ-fGysr5vsABWGh5N2gvlqMz5DVuGP7XxbommEpWngXEp5bxldLAfjQmdffkHWPymjBI5NbpWLogPqHKXvELnrNlEDhsDvcLs1NW249Dn-JFW0cS7teCcIU9nywiO641mZFcel8IHki2czZMRv9UqEiIY1YYakyZZLSNMoJ-25oEYEfScqGqBZ5VB929YunD7jJho9Gr3q3rMQl5TODcNxQ9F8fpUI";
 
 interface Message {
   id: number;
@@ -103,7 +101,7 @@ const Chat = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: "No se pudo enviar el mensaje. Intenta de nuevo.",
         variant: "destructive",
       });
       // Remove the user message if failed to send
@@ -113,14 +111,8 @@ const Chat = () => {
     }
   };
 
-  const handleQuickAnxiety = async () => {
-    const anxietyMessage = "Estoy muy ansioso ahora";
-    setInputValue(anxietyMessage);
-    
-    // Trigger send after a short delay to allow state update
-    setTimeout(() => {
-      handleSendMessage();
-    }, 100);
+  const handleSuggestion = (text: string) => {
+    setInputValue(text);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -130,119 +122,219 @@ const Chat = () => {
     }
   };
 
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm py-4 px-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-xl font-bold text-indigo-700">Acompañamiento para Ansiedad</h1>
-          <Button 
-            variant="outline" 
+    <div className="bg-sanctuary-surface font-body text-sanctuary-on-surface min-h-screen flex flex-col selection:bg-sanctuary-primary-container">
+      {/* Top Navigation Shell */}
+      <header className="w-full sticky top-0 z-40 bg-sanctuary-surface flex justify-between items-center px-6 py-4 max-w-full mx-auto">
+        <div className="flex items-center gap-4">
+          <button
+            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-sanctuary-surface-variant/50 transition-colors active:scale-95 duration-200"
             onClick={() => {
               localStorage.removeItem('token');
               localStorage.removeItem('userId');
               window.location.href = '/login';
             }}
           >
-            Cerrar sesión
-          </Button>
+            <span className="material-symbols-outlined text-sanctuary-primary">arrow_back</span>
+          </button>
+          <div className="flex items-center gap-3">
+            <img
+              alt="Avatar de Brotito"
+              className="w-10 h-10 rounded-full object-cover"
+              src={MASCOT_URL}
+            />
+            <div>
+              <h1 className="font-headline text-lg font-semibold tracking-tight text-sanctuary-primary">
+                Brotito
+              </h1>
+              <span className="text-[10px] uppercase tracking-widest text-sanctuary-on-surface-variant font-bold">
+                En línea
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-sanctuary-surface-variant/50 transition-colors">
+            <span className="material-symbols-outlined text-sanctuary-primary">info</span>
+          </button>
         </div>
       </header>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col p-4 max-w-4xl w-full mx-auto">
-        <div className="mb-4">
-          <Button 
-            onClick={handleQuickAnxiety}
-            className="bg-rose-500 hover:bg-rose-600 text-white"
-          >
-            <Heart className="mr-2 h-4 w-4" />
-            Estoy muy ansioso ahora
-          </Button>
+      <main className="max-w-3xl mx-auto px-6 pt-6 pb-44 flex-1 w-full">
+        {/* Floating Breathing Tool */}
+        <div className="flex flex-col items-center justify-center mb-10">
+          <div className="relative flex items-center justify-center">
+            <div className="animate-breath absolute w-16 h-16 rounded-full bg-sanctuary-primary-fixed-dim"></div>
+            <div className="relative w-12 h-12 rounded-full bg-sanctuary-primary flex items-center justify-center shadow-lg">
+              <span className="material-symbols-outlined text-sanctuary-on-primary text-xl">air</span>
+            </div>
+          </div>
+          <p className="mt-4 text-sm font-medium text-sanctuary-on-surface-variant">
+            Enfócate en tu respiración
+          </p>
         </div>
 
-        <Card className="flex-1 flex flex-col">
-          <CardContent className="flex-1 p-0">
-            <ScrollArea className="h-[calc(100vh-220px)] p-4" ref={scrollAreaRef}>
-              <div className="space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                        message.isUser
-                          ? 'bg-indigo-600 text-white rounded-tr-none'
-                          : 'bg-gray-100 text-gray-800 rounded-tl-none'
-                      }`}
-                    >
-                      <div className="flex items-start space-x-2">
-                        {!message.isUser && (
-                          <div className="mt-0.5">
-                            <Heart className="h-4 w-4 text-indigo-500" />
-                          </div>
-                        )}
-                        <div>
-                          {message.content.split('\n').map((line, i) => (
-                            <p key={i} className="mb-2 last:mb-0">{line}</p>
-                          ))}
-                        </div>
-                        {message.isUser && (
-                          <div className="mt-0.5">
-                            <User className="h-4 w-4 text-indigo-200" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-tl-none px-4 py-3">
-                      <div className="flex space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce"></div>
-                        <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce delay-200"></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
+        {/* Chat Conversation */}
+        <div className="space-y-8" ref={scrollAreaRef}>
+          {/* Timestamp */}
+          <div className="flex justify-center">
+            <span className="px-4 py-1 rounded-full bg-sanctuary-surface-container text-[11px] font-bold tracking-widest text-sanctuary-on-surface-variant uppercase">
+              Hoy
+            </span>
+          </div>
 
-        {/* Input Area */}
-        <div className="mt-4">
-          <div className="flex space-x-2">
-            <Input
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyPress}
-              placeholder="Escribe tu mensaje aquí..."
-              className="flex-1"
-              disabled={isLoading}
-            />
-            <Button 
-              onClick={handleSendMessage} 
-              disabled={isLoading || !inputValue.trim()}
-              className="bg-indigo-600 hover:bg-indigo-700"
+          {/* Messages */}
+          {messages.map((message) => (
+            <div key={message.id}>
+              {message.isUser ? (
+                /* User Message */
+                <div className="flex flex-col items-end gap-2 ml-auto max-w-[85%]">
+                  <div className="bg-sanctuary-secondary-container text-sanctuary-on-secondary-container rounded-sanctuary rounded-br-none p-5 shadow-sm">
+                    {message.content.split('\n').map((line, i) => (
+                      <p key={i} className="text-base leading-relaxed mb-2 last:mb-0">{line}</p>
+                    ))}
+                  </div>
+                  <span className="text-[10px] text-sanctuary-on-surface-variant mr-2">
+                    {formatTime(message.timestamp)}
+                  </span>
+                </div>
+              ) : (
+                /* Assistant Message */
+                <div className="flex items-end gap-3 max-w-[85%] group">
+                  <div className="flex-shrink-0 mb-1">
+                    <img
+                      className="w-8 h-8 rounded-full"
+                      alt="Brotito"
+                      src={MASCOT_URL}
+                    />
+                  </div>
+                  <div className="bg-sanctuary-surface-container-high text-sanctuary-on-surface rounded-sanctuary rounded-bl-none p-5 shadow-sm">
+                    {message.content.split('\n').map((line, i) => (
+                      <p key={i} className="text-base leading-relaxed mb-2 last:mb-0">{line}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Loading indicator */}
+          {isLoading && (
+            <div className="flex items-end gap-3 max-w-[85%]">
+              <div className="flex-shrink-0 mb-1">
+                <img className="w-8 h-8 rounded-full" alt="Brotito" src={MASCOT_URL} />
+              </div>
+              <div className="bg-sanctuary-surface-container-high text-sanctuary-on-surface rounded-sanctuary rounded-bl-none p-5 shadow-sm">
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 rounded-full bg-sanctuary-outline animate-bounce"></div>
+                  <div className="w-2 h-2 rounded-full bg-sanctuary-outline animate-bounce [animation-delay:0.1s]"></div>
+                  <div className="w-2 h-2 rounded-full bg-sanctuary-outline animate-bounce [animation-delay:0.2s]"></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Suggestion Chips — show only when no messages yet */}
+          {messages.length === 0 && !isLoading && (
+            <div className="flex flex-wrap gap-2 justify-center pt-4">
+              <button
+                onClick={() => handleSuggestion("Me siento ansioso/a")}
+                className="px-5 py-2 rounded-full bg-sanctuary-surface-container-lowest border border-sanctuary-outline-variant/15 text-sanctuary-primary text-sm font-medium hover:bg-sanctuary-surface-container-low transition-all active:scale-95"
+              >
+                Me siento ansioso/a
+              </button>
+              <button
+                onClick={() => handleSuggestion("Quiero hablar")}
+                className="px-5 py-2 rounded-full bg-sanctuary-surface-container-lowest border border-sanctuary-outline-variant/15 text-sanctuary-primary text-sm font-medium hover:bg-sanctuary-surface-container-low transition-all active:scale-95"
+              >
+                Quiero hablar
+              </button>
+              <button
+                onClick={() => handleSuggestion("Mostrar recursos")}
+                className="px-5 py-2 rounded-full bg-sanctuary-surface-container-lowest border border-sanctuary-outline-variant/15 text-sanctuary-primary text-sm font-medium hover:bg-sanctuary-surface-container-low transition-all active:scale-95"
+              >
+                Mostrar recursos
+              </button>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Bottom Interaction Area */}
+      <div className="fixed bottom-0 left-0 w-full z-50">
+        {/* Input Bar Container */}
+        <div className="max-w-3xl mx-auto px-6 pb-24">
+          <div className="bg-glass rounded-sanctuary-xl shadow-[0px_-10px_30px_rgba(52,50,43,0.04)] p-3 flex items-center gap-3">
+            <button
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-sanctuary-surface-variant/50 transition-colors text-sanctuary-primary active:scale-90"
+              type="button"
             >
-              <Send className="h-4 w-4" />
-            </Button>
+              <span className="material-symbols-outlined">add</span>
+            </button>
+            <div className="flex-1 relative">
+              <input
+                className="w-full bg-sanctuary-surface-container-lowest border-none rounded-full py-3 px-5 focus:ring-2 focus:ring-sanctuary-primary/20 text-sanctuary-on-surface placeholder:text-sanctuary-on-surface-variant/50 font-body"
+                placeholder="Comparte lo que tienes en mente..."
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyPress}
+                disabled={isLoading}
+              />
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-sanctuary-surface-variant/50 transition-colors text-sanctuary-on-surface-variant active:scale-90"
+                type="button"
+              >
+                <span className="material-symbols-outlined">mic</span>
+              </button>
+              <button
+                className="w-12 h-12 rounded-full bg-sanctuary-primary flex items-center justify-center text-sanctuary-on-primary shadow-lg shadow-sanctuary-primary/20 active:scale-95 transition-transform disabled:opacity-60"
+                onClick={handleSendMessage}
+                disabled={isLoading || !inputValue.trim()}
+                type="button"
+              >
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  send
+                </span>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <footer className="py-3 text-center text-xs text-gray-500">
-        <p>
-          Esta aplicación es un acompañamiento entre sesiones terapéuticas, 
-          no reemplaza la terapia profesional.
-        </p>
-        <p className="mt-1">Desarrollado por noomesk 2026 - Todos los derechos reservados</p>
-      </footer>
+        {/* Global Navigation */}
+        <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-4 bg-glass rounded-t-sanctuary-xl border-t border-sanctuary-outline-variant/15 shadow-[0px_-10px_30px_rgba(52,50,43,0.04)]">
+          <a
+            className="flex flex-col items-center justify-center bg-sanctuary-primary-container text-sanctuary-on-primary-container rounded-full px-6 py-2 transition-all"
+            href="/chat"
+          >
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
+              chat_bubble
+            </span>
+            <span className="font-label text-[12px] font-medium tracking-wide mt-1">Chat</span>
+          </a>
+          <a
+            className="flex flex-col items-center justify-center text-sanctuary-on-surface/60 px-6 py-2 hover:text-sanctuary-primary transition-all"
+            href="#"
+          >
+            <span className="material-symbols-outlined">library_books</span>
+            <span className="font-label text-[12px] font-medium tracking-wide mt-1">Recursos</span>
+          </a>
+          <a
+            className="flex flex-col items-center justify-center text-sanctuary-on-surface/60 px-6 py-2 hover:text-sanctuary-primary transition-all"
+            href="#"
+          >
+            <span className="material-symbols-outlined">person</span>
+            <span className="font-label text-[12px] font-medium tracking-wide mt-1">Perfil</span>
+          </a>
+        </nav>
+      </div>
     </div>
   );
 };

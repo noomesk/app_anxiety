@@ -105,27 +105,16 @@ async def send_message(request: MessageRequest, db: Session = Depends(get_db)):
     # Get user memory
 
     user_memory = db.query(UserMemory).filter(UserMemory.user_id == request.user_id).first()
-
     memory_dict = None
-
     if user_memory:
-
         memory_dict = {
-
             "name_or_alias": user_memory.name_or_alias,
-
             "therapeutic_goal": user_memory.therapeutic_goal,
-
             "preferred_exercises": user_memory.preferred_exercises,
-
             "last_emotional_state": user_memory.last_emotional_state
-
         }
-
     
-
     # Process message with chat engine
-
     bot_response = await chat_engine.process_message(request.content, memory_dict)
 
     
