@@ -21,15 +21,9 @@ class Settings:
     # Groq API
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
 
-    # ──────────────────────────────────────────────────────────
-    # NOTA: La detección de riesgo ya NO usa una lista de keywords
-    # simple aquí. Toda la lógica vive en:
-    #   app/core/risk_detection.py
-    #
-    # Las listas HIGH_PRECISION_KEYWORDS y FALSE_POSITIVE_PHRASES
-    # en ese archivo son la fuente de verdad.
-    # No agregues keywords aquí — edita risk_detection.py directamente.
-    # ──────────────────────────────────────────────────────────
+    # email
+    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:8080")
 
 
 settings = Settings()
