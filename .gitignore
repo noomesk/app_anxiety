@@ -21,6 +21,7 @@ dist-ssr
 *.db
 *.sqlite
 *.sqlite3
+test.db
 
 # Python
 __pycache__/
