@@ -97,7 +97,7 @@ const Resources = () => {
           </a>
 
           {/* Card 4: Psicoeducación */}
-          <div className="bg-sanctuary-surface-container-lowest hover:bg-sanctuary-surface-container transition-colors border border-sanctuary-outline-variant/30 rounded-sanctuary-xl p-5 flex flex-col cursor-pointer group active:scale-[0.98]">
+          <Link to="/resources/psychoeducation" className="bg-sanctuary-surface-container-lowest hover:bg-sanctuary-surface-container transition-colors border border-sanctuary-outline-variant/30 rounded-sanctuary-xl p-5 flex flex-col cursor-pointer group active:scale-[0.98]">
             <div className="w-12 h-12 rounded-full bg-[#FCE8E6] flex items-center justify-center mb-4 text-[#C5221F] group-hover:bg-[#FAD2CF] transition-colors">
               <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
                 menu_book
@@ -110,7 +110,7 @@ const Resources = () => {
             <div className="mt-auto flex justify-end">
               <span className="material-symbols-outlined text-[#C5221F]">arrow_forward</span>
             </div>
-          </div>
+          </Link>
 
         </section>
       </main>
