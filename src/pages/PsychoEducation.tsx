@@ -149,8 +149,12 @@ const PsychoEducation = () => {
           <span className="material-symbols-outlined text-sanctuary-on-surface-variant text-xl">add</span>
         </button>
         <p className="flex-1 text-sm text-sanctuary-on-surface-variant/80 text-left">Pregúntale a Brotito sobre tus semillas...</p>
-        <button className="w-10 h-10 flex items-center justify-center shrink-0">
-          <span className="material-symbols-outlined text-sanctuary-on-surface-variant group-hover:text-sanctuary-primary">mic</span>
+        <button 
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+          className="w-10 h-10 flex items-center justify-center shrink-0 opacity-40 cursor-not-allowed"
+          title="Próximamente: Entrada por voz"
+        >
+          <span className="material-symbols-outlined text-sanctuary-on-surface-variant">mic</span>
         </button>
       </Link>
 
