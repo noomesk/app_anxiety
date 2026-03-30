@@ -13,26 +13,35 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from jose import jwt, JWTError
-from passlib.context import CryptContext
-
+import bcrypt
 from .config import settings
 
-
 # ── Hashing de contraseñas ────────────────────────────────────
-# bcrypt es el estándar para contraseñas: lento por diseño,
-# resistente a ataques de fuerza bruta.
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
+# Usamos bcrypt directamente para evitar incompatibilidades con passlib
 
 def hash_password(plain_password: str) -> str:
     """Devuelve el hash bcrypt de una contraseña en texto plano."""
-    return pwd_context.hash(plain_password)
+    # Bcrypt maneja el salting automáticamente
+    password_bytes = plain_password.encode("utf-8")
+    # Truncar a 72 si es necesario (limite de bcrypt) para consistencia
+    if len(password_bytes) > 72:
+        password_bytes = password_bytes[:72]
+    
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode("utf-8")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Compara una contraseña en texto plano con su hash almacenado."""
-    return pwd_context.verify(plain_password, hashed_password)
+    password_bytes = plain_password.encode("utf-8")
+    if len(password_bytes) > 72:
+        password_bytes = password_bytes[:72]
+    
+    try:
+        return bcrypt.checkpw(password_bytes, hashed_password.encode("utf-8"))
+    except Exception:
+        return False
 
 
 # ── JWT ───────────────────────────────────────────────────────
