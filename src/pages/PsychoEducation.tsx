@@ -25,7 +25,7 @@ const capsules = [
     emojiTop: '🌧️',
     seedState: 'seed',
     progress: 0,
-    locked: true,
+    locked: false,
   },
   {
     id: '4',
@@ -33,7 +33,7 @@ const capsules = [
     emojiTop: '🏢',
     seedState: 'seed',
     progress: 0,
-    locked: true,
+    locked: false,
   },
   {
     id: '5',
@@ -41,7 +41,7 @@ const capsules = [
     emojiTop: '🪹',
     seedState: 'seed',
     progress: 0,
-    locked: true,
+    locked: false,
   },
   {
     id: '6',
@@ -49,7 +49,7 @@ const capsules = [
     emojiTop: '🌙',
     seedState: 'seed',
     progress: 0,
-    locked: true,
+    locked: false,
   }
 ];
 
@@ -144,15 +144,15 @@ const PsychoEducation = () => {
       </main>
 
       {/* Floating Chat Prompt */}
-      <div className="fixed bottom-24 left-6 right-6 max-w-md mx-auto bg-sanctuary-surface-container-low/90 backdrop-blur-md rounded-[32px] p-4 flex items-center gap-4 shadow-xl border border-sanctuary-outline-variant/20">
-        <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0 border border-sanctuary-outline-variant/10">
+      <Link to="/chat" className="fixed bottom-24 left-6 right-6 max-w-md mx-auto bg-sanctuary-surface-container-low/90 backdrop-blur-md rounded-[32px] p-4 flex items-center gap-4 shadow-xl border border-sanctuary-outline-variant/20 cursor-pointer hover:bg-sanctuary-surface-container-low transition-colors group">
+        <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0 border border-sanctuary-outline-variant/10 group-hover:bg-sanctuary-surface">
           <span className="material-symbols-outlined text-sanctuary-on-surface-variant text-xl">add</span>
         </button>
-        <p className="flex-1 text-sm text-sanctuary-on-surface-variant/80">Pregúntale a Brotito sobre tus semillas...</p>
+        <p className="flex-1 text-sm text-sanctuary-on-surface-variant/80 text-left">Pregúntale a Brotito sobre tus semillas...</p>
         <button className="w-10 h-10 flex items-center justify-center shrink-0">
-          <span className="material-symbols-outlined text-sanctuary-on-surface-variant">mic</span>
+          <span className="material-symbols-outlined text-sanctuary-on-surface-variant group-hover:text-sanctuary-primary">mic</span>
         </button>
-      </div>
+      </Link>
 
       {/* Global Navigation */}
       <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-4 bg-sanctuary-surface/95 backdrop-blur-xl rounded-t-[32px] border-t border-sanctuary-outline-variant/15 shadow-[0px_-10px_30px_rgba(52,50,43,0.04)]">
