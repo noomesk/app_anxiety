@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 
 const MASCOT_URL =
@@ -310,29 +311,29 @@ const Chat = () => {
 
         {/* Global Navigation */}
         <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-4 bg-glass rounded-t-sanctuary-xl border-t border-sanctuary-outline-variant/15 shadow-[0px_-10px_30px_rgba(52,50,43,0.04)]">
-          <a
+          <Link
             className="flex flex-col items-center justify-center bg-sanctuary-primary-container text-sanctuary-on-primary-container rounded-full px-6 py-2 transition-all"
-            href="/chat"
+            to="/chat"
           >
             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
               chat_bubble
             </span>
             <span className="font-label text-[12px] font-medium tracking-wide mt-1">Chat</span>
-          </a>
-          <a
+          </Link>
+          <Link
             className="flex flex-col items-center justify-center text-sanctuary-on-surface/60 px-6 py-2 hover:text-sanctuary-primary transition-all"
-            href="#"
+            to="/resources"
           >
             <span className="material-symbols-outlined">library_books</span>
             <span className="font-label text-[12px] font-medium tracking-wide mt-1">Recursos</span>
-          </a>
-          <a
+          </Link>
+          <Link
             className="flex flex-col items-center justify-center text-sanctuary-on-surface/60 px-6 py-2 hover:text-sanctuary-primary transition-all"
-            href="#"
+            to="/profile"
           >
             <span className="material-symbols-outlined">person</span>
             <span className="font-label text-[12px] font-medium tracking-wide mt-1">Perfil</span>
-          </a>
+          </Link>
         </nav>
       </div>
     </div>

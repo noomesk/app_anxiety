@@ -8,6 +8,9 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
+import Resources from "./pages/Resources";
+import BreathingExercise from "./pages/BreathingExercise";
+
 
 const queryClient = new QueryClient();
 
@@ -22,6 +25,8 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/breathing" element={<BreathingExercise />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
