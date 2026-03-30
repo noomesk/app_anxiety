@@ -115,7 +115,7 @@ async def send_message(request: MessageRequest, db: Session = Depends(get_db)):
         }
     
     # Process message with chat engine
-    bot_response = await chat_engine.process_message(request.content, memory_dict)
+    bot_response = await chat_engine.process_message(request.content, request.user_id, memory_dict)
 
     
 
