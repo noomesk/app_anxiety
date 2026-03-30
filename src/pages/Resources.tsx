@@ -49,7 +49,7 @@ const Resources = () => {
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           {/* Card 1: SOS / Emergencias */}
-          <div className="bg-red-50 hover:bg-red-100 transition-colors border border-red-100 rounded-sanctuary-xl p-5 flex flex-col cursor-pointer group active:scale-[0.98]">
+          <Link to="/resources/emergency" className="bg-red-50 hover:bg-red-100 transition-colors border border-red-100 rounded-sanctuary-xl p-5 flex flex-col cursor-pointer group active:scale-[0.98]">
             <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-4 text-red-600 group-hover:bg-red-200 transition-colors">
               <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
                 emergency
@@ -57,12 +57,12 @@ const Resources = () => {
             </div>
             <h3 className="font-bold text-red-900 mb-1">SOS / Emergencias</h3>
             <p className="text-red-700/80 text-sm leading-relaxed mb-4">
-              Números de ayuda inmediata y botón de pánico si estás en crisis profunda.
+              Números de ayuda inmediata y botones de directo si estás en crisis profunda en Colombia.
             </p>
             <div className="mt-auto flex justify-end">
               <span className="material-symbols-outlined text-red-500">arrow_forward</span>
             </div>
-          </div>
+          </Link>
 
           {/* Card 2: Ejercicios de alivio rápido */}
           <Link to="/resources/breathing" className="bg-sanctuary-surface-container-lowest hover:bg-sanctuary-surface-container transition-colors border border-sanctuary-outline-variant/30 rounded-sanctuary-xl p-5 flex flex-col cursor-pointer group active:scale-[0.98]">
@@ -81,7 +81,7 @@ const Resources = () => {
           </Link>
 
           {/* Card 3: Paisaje Sonoro */}
-          <div className="bg-sanctuary-surface-container-lowest hover:bg-sanctuary-surface-container transition-colors border border-sanctuary-outline-variant/30 rounded-sanctuary-xl p-5 flex flex-col cursor-pointer group active:scale-[0.98]">
+          <a href="https://mynoise.net/" target="_blank" rel="noopener noreferrer" className="bg-sanctuary-surface-container-lowest hover:bg-sanctuary-surface-container transition-colors border border-sanctuary-outline-variant/30 rounded-sanctuary-xl p-5 flex flex-col cursor-pointer group active:scale-[0.98]">
             <div className="w-12 h-12 rounded-full bg-[#E8F0FE] flex items-center justify-center mb-4 text-[#1967D2] group-hover:bg-[#D2E3FC] transition-colors">
               <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
                 headphones
@@ -89,12 +89,12 @@ const Resources = () => {
             </div>
             <h3 className="font-bold text-sanctuary-on-surface mb-1">Paisaje sonoro</h3>
             <p className="text-sanctuary-on-surface-variant text-sm leading-relaxed mb-4">
-              Audios de ruido blanco, sonidos de naturaleza y meditaciones guiadas.
+              Encuentra paisajes sonoros inmersivos y adécualos a tu gusto. Mientras construimos nuestro propio banco de sonidos de Brotito, esta herramienta externa funcionará muy bien para calmarte, relajarte, concentrarte al estudiar o simplemente estar presente.
             </p>
             <div className="mt-auto flex justify-end">
-              <span className="material-symbols-outlined text-[#1967D2]">arrow_forward</span>
+              <span className="material-symbols-outlined text-[#1967D2] rotate-[-45deg]">arrow_forward</span>
             </div>
-          </div>
+          </a>
 
           {/* Card 4: Psicoeducación */}
           <div className="bg-sanctuary-surface-container-lowest hover:bg-sanctuary-surface-container transition-colors border border-sanctuary-outline-variant/30 rounded-sanctuary-xl p-5 flex flex-col cursor-pointer group active:scale-[0.98]">

@@ -4,39 +4,86 @@ import { Link } from 'react-router-dom';
 const BreathingExercise = () => {
   const [phase, setPhase] = useState<'Inhala' | 'Mantén' | 'Exhala'>('Inhala');
   const [isActive, setIsActive] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(4); // Starts with Inhale (4s)
+
+  const playZenChime = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      osc.type = 'sine';
+      // Calming 432Hz frequency
+      osc.frequency.setValueAtTime(432, ctx.currentTime);
+      
+      // Soft envelope (Attack / Decay)
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.1); 
+      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.5);
+
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      osc.start();
+      osc.stop(ctx.currentTime + 3);
+    } catch (e) {
+      console.warn("Audio playback issue", e);
+    }
+  };
 
   useEffect(() => {
     if (!isActive) return;
 
-    let timeoutId: NodeJS.Timeout;
+    // A single interval running every 1000ms
+    const intervalId = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev > 1) {
+          return prev - 1;
+        } else {
+          // Transition to next phase
+          playZenChime();
+          setPhase((currentPhase) => {
+            if (currentPhase === 'Inhala') {
+              setTimeLeft(7);
+              return 'Mantén';
+            } else if (currentPhase === 'Mantén') {
+              setTimeLeft(8);
+              return 'Exhala';
+            } else {
+              setTimeLeft(4);
+              return 'Inhala';
+            }
+          });
+          return 0; // Temporary return, overriden by setTimeLeft inside setPhase, but technically React batches this.
+        }
+      });
+    }, 1000);
 
-    const cycleBreathing = () => {
-      setPhase('Inhala');
-      timeoutId = setTimeout(() => {
-        setPhase('Mantén');
-        timeoutId = setTimeout(() => {
-          setPhase('Exhala');
-          timeoutId = setTimeout(cycleBreathing, 8000); // 8 seconds exhale
-        }, 7000); // 7 seconds hold
-      }, 4000); // 4 seconds inhale
-    };
-
-    cycleBreathing();
-
-    return () => clearTimeout(timeoutId);
+    return () => clearInterval(intervalId);
   }, [isActive]);
+
+  const toggleExercise = () => {
+    if (!isActive) {
+      setPhase('Inhala');
+      setTimeLeft(4);
+      playZenChime(); // Initial chime
+    }
+    setIsActive(!isActive);
+  };
 
   return (
     <div className="bg-sanctuary-surface font-body text-sanctuary-on-surface min-h-screen flex flex-col selection:bg-sanctuary-primary-container">
       {/* Top Navigation Shell */}
       <header className="w-full sticky top-0 z-40 bg-sanctuary-surface flex justify-between items-center px-6 py-4 max-w-full mx-auto">
         <div className="flex items-center gap-4">
-          <button
+          <Link
+            to="/resources"
             className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-sanctuary-surface-variant/50 transition-colors active:scale-95 duration-200"
-            onClick={() => window.history.back()}
           >
             <span className="material-symbols-outlined text-sanctuary-primary">arrow_back</span>
-          </button>
+          </Link>
           <div className="flex items-center gap-3">
             <h1 className="font-headline text-2xl font-semibold tracking-tight text-sanctuary-primary">
               Respiración 4-7-8
@@ -82,8 +129,13 @@ const BreathingExercise = () => {
               {isActive ? phase : 'Listo'}
             </span>
             {isActive && (
+              <span className="text-sanctuary-on-primary/90 text-2xl mt-1 font-bold">
+                {timeLeft}s
+              </span>
+            )}
+            {!isActive && (
               <span className="text-sanctuary-on-primary/70 text-sm mt-2 font-medium">
-                {phase === 'Inhala' ? '4 segundos' : phase === 'Mantén' ? '7 segundos' : '8 segundos'}
+                Toca Comenzar
               </span>
             )}
           </div>
@@ -92,7 +144,7 @@ const BreathingExercise = () => {
         {/* Controls */}
         <div className="mt-16">
           <button
-            onClick={() => setIsActive(!isActive)}
+            onClick={toggleExercise}
             className={`px-10 py-4 rounded-full font-bold tracking-wide transition-all active:scale-95 shadow-lg ${
               isActive
                 ? 'bg-sanctuary-surface-variant text-sanctuary-on-surface-variant hover:bg-sanctuary-surface-variant/80'
