@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { API_URL } from "@/config/api";
 
 const MASCOT_URL =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDCHFLGYbTmTeRXf-l4i2c_lKxAEARQNoxKd8G5rIMV55h7IZ-fGysr5vsABWGh5N2gvlqMz5DVuGP7XxbommEpWngXEp5bxldLAfjQmdffkHWPymjBI5NbpWLogPqHKXvELnrNlEDhsDvcLs1NW249Dn-JFW0cS7teCcIU9nywiO641mZFcel8IHki2czZMRv9UqEiIY1YYakyZZLSNMoJ-25oEYEfScqGqBZ5VB929YunD7jJho9Gr3q3rMQl5TODcNxQ9F8fpUI";
@@ -117,7 +118,7 @@ const LoginForm = ({ onForgot, onRegister, toast }: LoginFormProps) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),  // ← ahora envía contraseña
@@ -258,7 +259,7 @@ const RegisterForm = ({ onBack, toast }: RegisterFormProps) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth/register", {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -393,7 +394,7 @@ const ForgotForm = ({ onBack, toast }: ForgotFormProps) => {
     try {
       // Llama al endpoint de recuperación.
       // El backend siempre responde OK (no revela si el email existe).
-      await fetch("http://localhost:8000/api/auth/forgot-password", {
+      await fetch(`${API_URL}/api/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
