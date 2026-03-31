@@ -5,17 +5,20 @@ from .db import init_db
 
 app = FastAPI(title="Anxiety Companion API")
 
-# CORS corregido:
+# CORS configurado para desarrollo y producción:
 # allow_credentials=True requiere orígenes explícitos (no "*")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:8080",
-        "http://localhost:5173",   # puerto default de vite
-        "http://127.0.0.1:8080",
+        # Producción en Vercel
+        "https://app-anxiety.vercel.app",
+        # Desarrollo local
+        "http://localhost:5173",  # Para desarrollo local
+        "http://localhost:3000",   # Por si usas otro puerto
+        "http://localhost:8080",   # Puerto principal
         "http://127.0.0.1:5173",
-        "http://[::1]:8080",      # IPv6 localhost
-        "http://[::1]:5173",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8080",
     ],
     allow_credentials=True,
     allow_methods=["*"],
