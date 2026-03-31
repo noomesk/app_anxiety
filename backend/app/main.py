@@ -10,12 +10,12 @@ app = FastAPI(title="Anxiety Companion API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        # Producción en Vercel
-        "https://app-anxiety.vercel.app",
+        # Producción en Render (frontend)
+        "https://app-anxiety-frontend.onrender.com",
         # Desarrollo local
-        "http://localhost:5173",  # Para desarrollo local
-        "http://localhost:3000",   # Por si usas otro puerto
-        "http://localhost:8080",   # Puerto principal
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost:8080",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:8080",
