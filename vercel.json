@@ -1,9 +1,21 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "backend/app/main.py",
+      "use": "@vercel/python"
     }
-  ]
+  ],
+  "routes": [
+    {
+      "src": "backend/app/main.py",
+      "dest": "/api"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@sqlite_db",
+    "GROQ_API_KEY": "@groq_api_key",
+    "SECRET_KEY": "@secret_key",
+    "RESEND_API_KEY": "@resend_api_key"
+  }
 }
