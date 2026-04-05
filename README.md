@@ -1,5 +1,9 @@
 # Anxiety Companion App
 
+
+https://github.com/user-attachments/assets/025b2541-8fce-43ec-a054-28b602ef84bd
+
+
 Una aplicación de acompañamiento emocional para personas con ansiedad, diseñada para usarse entre sesiones terapéuticas bajo supervisión de un profesional.
 
 ## Estado Actual de la Aplicación
